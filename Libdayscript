@@ -1,0 +1,35 @@
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import time
+
+# Set up the Chrome webdriver
+driver = webdriver.Chrome()
+driver.get("https://www.linkedin.com/")  # Open LinkedIn
+
+# TODO: Manually log in to your LinkedIn account
+
+# Navigate to the Messages inbox
+driver.get("https://www.linkedin.com/messaging/")
+
+# Define the keyword
+keyword = "happy birthday"
+
+# Locate and iterate through the message items
+message_items = driver.find_elements_by_class_name("msg-conversation-listitem")
+for item in message_items:
+    last_message = item.find_element_by_class_name("msg-conversation-card__message-snippet").text
+    if keyword in last_message.lower():
+        reply_button = item.find_element_by_class_name("msg-conversation-card__reply-button")
+        reply_button.click()
+
+        # Type the reply message
+        reply_text = "thank you!!!"
+        reply_input = driver.find_element_by_class_name("msg-form__contenteditable")
+        reply_input.send_keys(reply_text)
+
+        # Send the reply
+        send_button = driver.find_element_by_class_name("msg-form__send-button")
+        send_button.click()
+
+# Close the browser
+driver.quit()
